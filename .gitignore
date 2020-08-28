@@ -1,0 +1,4 @@
+vendor/
+googlesheets/token.json
+uploads/latestreport.json
+cucumber-report.json
