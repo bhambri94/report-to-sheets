@@ -61,14 +61,25 @@ func GetReport(jsonName string) [][]interface{} {
 				row = append(row, cucumberReport[i].Elements[j].Name)
 			}
 			k := 0
-			Status := true
+			Status := "true"
 			for k < len(cucumberReport[i].Elements[j].Steps) {
 				if cucumberReport[i].Elements[j].Steps[k].Result.Status == "failed" {
-					Status = false
+					Status = "false"
+				}
+				if cucumberReport[i].Elements[j].Steps[k].Result.Status == "skipped" {
+					if Status == "true" || Status == "skipped" {
+						Status = "skipped"
+					}
 				}
 				k++
 			}
-			row = append(row, Status)
+			if Status == "false" {
+				row = append(row, "Fail")
+			} else if Status == "true" {
+				row = append(row, "Pass")
+			} else if Status == "skipped" {
+				row = append(row, "Skipped")
+			}
 			j++
 		}
 		finalValues = append(finalValues, row)
