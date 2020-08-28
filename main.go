@@ -29,7 +29,8 @@ func main() {
 func handleReportToSheets(ctx *fasthttp.RequestCtx) {
 	sugar.Infof("received a push report request to Google Sheets!")
 	fh, err := ctx.FormFile("file")
-	JsonFileName := fh.Filename
+	fh2, err := ctx.FormFile("htmlfile")
+	JsonFileName := fh2.Filename
 	if err != nil {
 		sugar.Error(err)
 		ctx.Response.SetStatusCode(500)
