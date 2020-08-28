@@ -47,5 +47,6 @@ func handleReportToSheets(ctx *fasthttp.RequestCtx) {
 		googleSheets.BatchAppend(configs.Configurations.SheetNameWithRange, finalValues)
 	}
 	ctx.Response.Header.Set("Content-Type", "application/json")
+	ctx.SetBody([]byte("{\"success\":true,\"response\":\"Sheet has been updated\"}"))
 	// sugar.Infof(string(ctx.Request.Body()))
 }
