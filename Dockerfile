@@ -15,6 +15,6 @@ RUN go mod vendor
 
 RUN go build -o report-to-sheets
 
-EXPOSE 8010
+EXPOSE 3002
 
 CMD ["./report-to-sheets"]

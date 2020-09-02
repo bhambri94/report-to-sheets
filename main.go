@@ -28,7 +28,7 @@ func main() {
 	router.POST("/v1/report/save", handleReportToSheets)
 	router.POST("/v1/report/save/SendEmail=:SendEmail/RepeatEmailWithSameResults=:RepeatEmailWithSameResults", handleReportToSheets)
 	router.GET("/v1/report/sendEmail", handleReportToEmail)
-	log.Fatal(fasthttp.ListenAndServe(":8010", router.Handler))
+	log.Fatal(fasthttp.ListenAndServe(":3002", router.Handler))
 }
 func handleReportToEmail(ctx *fasthttp.RequestCtx) {
 	// email.SendEmail()
