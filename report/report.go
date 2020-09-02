@@ -38,7 +38,13 @@ type CucumberReport []struct {
 	} `json:"elements"`
 }
 
-func GetReport(jsonName string) [][]interface{} {
+var (
+	TestCaseResultsMap = make(map[string]string)
+	SendEmail          bool
+)
+
+func GetReport(jsonName string, RepeatEmailWhenChangeRequest string) ([][]interface{}, bool) {
+
 	jsonFile, err := os.Open("uploads/latestreport.json")
 	if err != nil {
 		fmt.Println(err)
@@ -75,9 +81,27 @@ func GetReport(jsonName string) [][]interface{} {
 			}
 			if Status == "false" {
 				row = append(row, "Fail")
+				if TestCaseResultsMap[cucumberReport[i].Elements[j].Name] == "Failed" && RepeatEmailWhenChangeRequest == "false" {
+					SendEmail = false
+				} else {
+					TestCaseResultsMap[cucumberReport[i].Elements[j].Name] = "Failed"
+					SendEmail = true
+				}
 			} else if Status == "true" {
+				if TestCaseResultsMap[cucumberReport[i].Elements[j].Name] == "Failed" {
+					SendEmail = false
+				} else {
+					SendEmail = false
+				}
+				TestCaseResultsMap[cucumberReport[i].Elements[j].Name] = "Passed"
 				row = append(row, "Pass")
 			} else if Status == "skipped" {
+				if TestCaseResultsMap[cucumberReport[i].Elements[j].Name] == "Failed" {
+					SendEmail = false
+				} else {
+					SendEmail = false
+				}
+				TestCaseResultsMap[cucumberReport[i].Elements[j].Name] = "Skipped"
 				row = append(row, "Skipped")
 			}
 			j++
@@ -86,5 +110,5 @@ func GetReport(jsonName string) [][]interface{} {
 		i++
 	}
 	fmt.Println(finalValues)
-	return finalValues
+	return finalValues, SendEmail
 }
